@@ -1,0 +1,10 @@
+**08/02/2023**
+premier RDV depuis décembre
+FAIT : 
+- expérimentations avec keras 
+À FAIRE : 
+- il faut aller plus vite
+- penser que c'est un projet de programmation
+- essayer l'approche par traitement d'image avec critères
+  + contour de l'oiseau, taille, couleur, etc.
+- revenir la semaine prochaine avec quelques preuves de concept
