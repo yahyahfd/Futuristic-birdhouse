@@ -8,3 +8,12 @@ FAIT :
 - essayer l'approche par traitement d'image avec critères
   + contour de l'oiseau, taille, couleur, etc.
 - revenir la semaine prochaine avec quelques preuves de concept
+
+**15/02/2023**
+Pagani:
+- ils ont montré ce qu'ils sont fait : get_dominant_color et get_aire.
+- je remarque qu'ils suppose de prendre de photos de oiusseaux trés specifique, pas vraiement realiste
+- je suggere de collecter bcp plus d'images (une cinquantaine, ou plus) et de tester 
+leur fonctions pour faire des clustering: est-ce que les images dans le meme cluster appartiennent à 
+la même espece de oiseau ?
+- il faut avancer plus vite, vu l'etat d'avancement du projet par rapport à la date. 
