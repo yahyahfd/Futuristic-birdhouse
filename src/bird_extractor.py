@@ -62,10 +62,10 @@ colors = [np.array([0, 0, 0], dtype=np.int32),  # Noir
           np.array([255, 0, 0], dtype=np.int32),  # Rouge
           np.array([0, 255, 0], dtype=np.int32),  # Vert
           np.array([255, 255, 0], dtype=np.int32),  # Jaune
-          np.array([255, 165, 0], dtype=np.int32),  # Orange
           np.array([255, 255, 255], dtype=np.int32),  # Blanc
-          np.array([150, 75, 0], dtype=np.int32),  # Marron
-          np.array([128, 128, 128], dtype=np.int32),  # Gris
+          # np.array([255, 165, 0], dtype=np.int32),  # Orange
+          # np.array([150, 75, 0], dtype=np.int32),  # Marron
+          # np.array([128, 128, 128], dtype=np.int32),  # Gris
           np.array([0, 0, 255], dtype=np.int32)]  # Bleu
 
 extract_bird("res/Background.png", "res/Rouge.png")
