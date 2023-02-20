@@ -90,11 +90,12 @@ colors = [np.array([0, 0, 0], dtype=np.int32),  # Noir
           np.array([0, 0, 255], dtype=np.int32),  # Bleu
           np.array([0, 255, 255], dtype=np.int32)]  # Cyan
 
-extract_bird("Background.png", "corbeau.png")
-extract_bird("Background.png", "corbeau2.png")
-extract_bird("Background.png", "corbeau3.png")
-extract_bird("Background.png", "corbeau4.png")
-extract_bird("Background.png", "moineau.png")
-extract_bird("Background.png", "moineau2.png")
-extract_bird("Background.png", "moineau3.png")
+# extract_bird("Background.png", "corbeau.png")
+# extract_bird("Background.png", "corbeau2.png")
+# extract_bird("Background.png", "corbeau3.png")
+# extract_bird("Background.png", "corbeau4.png")
+# extract_bird("Background.png", "moineau.png")
+# extract_bird("Background.png", "moineau2.png")
+# extract_bird("Background.png", "moineau3.png")
+extract_bird2("res/birds/moineau3.png")
 # print(get_dominant_color("res/ResultBird.png", colors))
