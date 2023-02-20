@@ -2,17 +2,41 @@ import cv2
 import numpy as np
 
 
+# methode qui extrait l'oiseau à partir d'une seule photo
+def extract_bird2(image):
+    img = cv2.imread(image)
+
+    # on converti l'image en gris
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # on applique le flou gaussien
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    # on detecte les contours
+    edged = cv2.Canny(blurred, 30, 150)
+    # on recherche des contours
+    contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Recherche du plus grand contour,qui correspond à l'oiseau
+    max_contour = max(contours, key=cv2.contourArea)
+    # Création d'un masque pour le plus grand contour
+    mask = np.zeros_like(gray)
+    cv2.drawContours(mask, [max_contour], 0, 255, -1)
+    # Extraction de l'oiseau
+    result = np.zeros_like(img)
+    result[mask == 255] = img[mask == 255]
+    # Affichage du résultat
+    cv2.imwrite("res/resultat.png", result)
+
+
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
-def extract_bird(img1, img2):
-    background = cv2.imread(img1)
-    bird = cv2.imread(img2)
-    result = bird.copy()
-    for i in range(len(bird)):
-        for j in range(len(bird[0])):
-            if (bird[i][j] == background[i][j]).all():
+def extract_bird(background, bird):
+    background_img = cv2.imread("res/background/"+background)
+    bird_img = cv2.imread("res/birds/"+bird)
+    result = bird_img.copy()
+    for i in range(len(bird_img)):
+        for j in range(len(bird_img[0])):
+            if (bird_img[i][j] == background_img[i][j]).all():
                 result[i][j] = (255, 255, 255)
-    cv2.imwrite("res/ResultBird.png", result)
+    cv2.imwrite("res/results/Result"+bird, result)
 
 
 # def closest_color(color, color_list):
@@ -63,10 +87,14 @@ colors = [np.array([0, 0, 0], dtype=np.int32),  # Noir
           np.array([0, 255, 0], dtype=np.int32),  # Vert
           np.array([255, 255, 0], dtype=np.int32),  # Jaune
           np.array([255, 255, 255], dtype=np.int32),  # Blanc
-          # np.array([255, 165, 0], dtype=np.int32),  # Orange
-          # np.array([150, 75, 0], dtype=np.int32),  # Marron
-          # np.array([128, 128, 128], dtype=np.int32),  # Gris
-          np.array([0, 0, 255], dtype=np.int32)]  # Bleu
+          np.array([0, 0, 255], dtype=np.int32),  # Bleu
+          np.array([0, 255, 255], dtype=np.int32)]  # Cyan
 
-extract_bird("res/Background.png", "res/Rouge.png")
-print(get_dominant_color("res/ResultBird.png", colors))
+extract_bird("Background.png", "corbeau.png")
+extract_bird("Background.png", "corbeau2.png")
+extract_bird("Background.png", "corbeau3.png")
+extract_bird("Background.png", "corbeau4.png")
+extract_bird("Background.png", "moineau.png")
+extract_bird("Background.png", "moineau2.png")
+extract_bird("Background.png", "moineau3.png")
+# print(get_dominant_color("res/ResultBird.png", colors))
