@@ -29,14 +29,16 @@ def extract_bird2(image):
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
 def extract_bird(background, bird):
-    background_img = cv2.imread("res/background/"+background)
-    bird_img = cv2.imread("res/birds/"+bird)
+    back = cv2.imread("res/background/" + background)
+    background_img = cv2.resize(back, (600, 400))
+    bir = cv2.imread("res/birds/" + bird)
+    bird_img = cv2.resize(bir, (600, 400))
     result = bird_img.copy()
     for i in range(len(bird_img)):
         for j in range(len(bird_img[0])):
             if (bird_img[i][j] == background_img[i][j]).all():
                 result[i][j] = (255, 255, 255)
-    cv2.imwrite("res/results/Result"+bird, result)
+    cv2.imwrite("res/results/Result" + bird.split('.')[0] + ".png", result)
 
 
 # def closest_color(color, color_list):
@@ -65,7 +67,7 @@ def closest_color(pixel, color_list):
 # renvoie la couleur la plus dominante a partir de l'image de l'oiseau
 # en considérant deux couleurs proches comme étant la meme couleur
 def get_dominant_color(image, colors_list):
-    img = cv2.imread(image)
+    img = cv2.imread("res/results/" + image)
     (h, w, d) = img.shape
     pixels = np.reshape(img, (h * w, d))
     color_counts = {}
@@ -77,18 +79,38 @@ def get_dominant_color(image, colors_list):
                 color_counts[color_key] += 1
             else:
                 color_counts[color_key] = 1
-    # return max(color_counts, key=color_counts.get)
-    return color_counts
+    return max(color_counts, key=color_counts.get)
+
+
+# compte le nombre de pixels de chaque couleur
+def color_count(img, colors_list):
+    image = cv2.imread("res/results/" + img)
+    color_counts = {color: 0 for color in colors_list.keys()}
+    total_pixels = 0
+    (h, w, d) = image.shape
+    pixels = np.reshape(image, (h * w, d))
+    for pixel in pixels:
+        if not np.all(pixel == [255, 255, 255]):
+            closest = closest_color(pixel, colors_list.values())
+            for color, value in colors_list.items():
+                if np.array_equal(value, closest):
+                    color_counts[color] += 1
+                    total_pixels += 1
+    print(img + " :")
+    print(f"area: {total_pixels} pixels")
+    for color, count in color_counts.items():
+        print(f"{color}: {round((count / total_pixels) * 100, 2)}")
 
 
 # les différentes couleurs possibles
-colors = [np.array([0, 0, 0], dtype=np.int32),  # Noir
-          np.array([255, 0, 0], dtype=np.int32),  # Rouge
-          np.array([0, 255, 0], dtype=np.int32),  # Vert
-          np.array([255, 255, 0], dtype=np.int32),  # Jaune
-          np.array([255, 255, 255], dtype=np.int32),  # Blanc
-          np.array([0, 0, 255], dtype=np.int32),  # Bleu
-          np.array([0, 255, 255], dtype=np.int32)]  # Cyan
+colors = {"Noir": np.array([0, 0, 0], dtype=np.int32),
+          "Rouge": np.array([255, 0, 0], dtype=np.int32),
+          "Vert": np.array([0, 255, 0], dtype=np.int32),
+          "Jaune": np.array([255, 255, 0], dtype=np.int32),
+          "Blanc": np.array([255, 255, 255], dtype=np.int32),
+          "Bleu": np.array([0, 0, 255], dtype=np.int32),
+          "Marron": np.array([150, 75, 255], dtype=np.int32),
+          "Cyan": np.array([0, 255, 255], dtype=np.int32)}
 
 # extract_bird("Background.png", "corbeau.png")
 # extract_bird("Background.png", "corbeau2.png")
@@ -97,5 +119,11 @@ colors = [np.array([0, 0, 0], dtype=np.int32),  # Noir
 # extract_bird("Background.png", "moineau.png")
 # extract_bird("Background.png", "moineau2.png")
 # extract_bird("Background.png", "moineau3.png")
-extract_bird2("res/birds/moineau3.png")
-# print(get_dominant_color("res/ResultBird.png", colors))
+# print(color_count("Resultcorbeau.png", colors))
+# print(color_count("Resultcorbeau2.png", colors))
+# print(color_count("Resultcorbeau3.png", colors))
+print(color_count("Resultcorbeau4.png", colors))
+print(color_count("Resultmoineau.png", colors))
+print(color_count("Resultmoineau2.png", colors))
+print(color_count("Resultmoineau3.png", colors))
+# extract_bird2("res/birds/moineau3.png")
