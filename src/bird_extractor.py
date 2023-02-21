@@ -68,18 +68,17 @@ def closest_color(pixel, color_list):
 # en considérant deux couleurs proches comme étant la meme couleur
 def get_dominant_color(image, colors_list):
     img = cv2.imread("res/results/" + image)
-    resized_img = cv2.resize(img, (300, 200))
-#     (h, w, d) = img.shape
-#     pixels = np.reshape(img, (h * w, d))
+    (h, w, d) = img.shape
+    pixels = np.reshape(img, (h * w, d))
     color_counts = {}
-#     for pixel in pixels:
-#         if not np.all(pixel == [255, 255, 255]):
-#             close_color = closest_color(pixel, colors_list)
-#             color_key = str(close_color)
-#             if color_key in color_counts:
-#                 color_counts[color_key] += 1
-#             else:
-#                 color_counts[color_key] = 1
+    for pixel in pixels:
+        if not np.all(pixel == [255, 255, 255]):
+            close_color = closest_color(pixel, colors_list)
+            color_key = str(close_color)
+            if color_key in color_counts:
+                color_counts[color_key] += 1
+            else:
+                color_counts[color_key] = 1
 
 
 # compte le nombre de pixels de chaque couleur
