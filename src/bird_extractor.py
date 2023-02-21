@@ -2,9 +2,6 @@ import cv2
 import numpy as np
 import os
 
-petit = 32000
-grand = 60000
-
 
 # methode qui extrait l'oiseau à partir d'une seule photo
 def extract_bird2(image):
@@ -120,18 +117,18 @@ colors = {"Noir": np.array([0, 0, 0], dtype=np.int32),
 def extract_all():
     directory = "res/birds/"
     # on parcours tout les fichier de birds
-    for img in os.listdir(directory):
+    for file in os.listdir(directory):
         # on verifie que le nom correspond à un fichier et que ca ne commence pas par un point
-        if os.path.isfile(os.path.join(directory, img)) and not img.startswith('.'):
-            extract_bird("res/background/Background.png", img)
+        if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
+            extract_bird("res/background/Background.png", file)
 
 
 # applique color_count pour tout les fichiers dans le dossier results
 def color_count_all(color_list):
     directory = "res/results/"
-    for img in os.listdir(directory):
-        if os.path.isfile(os.path.join(directory, img)) and not img.startswith('.'):
-            color_count(img, color_list)
+    for file in os.listdir(directory):
+        if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
+            color_count(file, color_list)
 
 
 extract_all()
