@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 petit = 32000
 grand = 60000
@@ -32,7 +33,8 @@ def extract_bird2(image):
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
 def extract_bird(background, bird):
-    back = cv2.imread("res/background/" + background)
+    print(f"extract_bird: bird = {bird}")
+    back = cv2.imread(background)
     background_img = cv2.resize(back, (600, 400))
     bir = cv2.imread("res/birds/" + bird)
     bird_img = cv2.resize(bir, (600, 400))
@@ -58,9 +60,7 @@ def closest_color(pixel, color_list):
     min_distance = np.inf
     closest = None
     for color in color_list:
-        b, g, r = pixel
-        cr, cg, cb = color
-        distance = ((r - cr) ** 2 + (g - cg) ** 2 + (b - cb) ** 2) ** 0.5
+        distance = np.sum(np.abs(color - pixel))
         if distance < min_distance:
             min_distance = distance
             closest = color
@@ -71,35 +71,35 @@ def closest_color(pixel, color_list):
 # en considérant deux couleurs proches comme étant la meme couleur
 def get_dominant_color(image, colors_list):
     img = cv2.imread("res/results/" + image)
-    (h, w, d) = img.shape
-    pixels = np.reshape(img, (h * w, d))
+    resized_img = cv2.resize(img, (300, 200))
+#     (h, w, d) = img.shape
+#     pixels = np.reshape(img, (h * w, d))
     color_counts = {}
-    for pixel in pixels:
-        if not np.all(pixel == [255, 255, 255]):
-            close_color = closest_color(pixel, colors_list)
-            color_key = str(close_color)
-            if color_key in color_counts:
-                color_counts[color_key] += 1
-            else:
-                color_counts[color_key] = 1
-    return max(color_counts, key=color_counts.get)
+#     for pixel in pixels:
+#         if not np.all(pixel == [255, 255, 255]):
+#             close_color = closest_color(pixel, colors_list)
+#             color_key = str(close_color)
+#             if color_key in color_counts:
+#                 color_counts[color_key] += 1
+#             else:
+#                 color_counts[color_key] = 1
 
 
 # compte le nombre de pixels de chaque couleur
 def color_count(img, colors_list):
+    print(f"color_count: file = {img}")
     image = cv2.imread("res/results/" + img)
+    resized_img = cv2.resize(image, (300, 200))
     color_counts = {color: 0 for color in colors_list.keys()}
     total_pixels = 0
-    (h, w, d) = image.shape
-    pixels = np.reshape(image, (h * w, d))
-    for pixel in pixels:
-        if not np.all(pixel == [255, 255, 255]):
-            closest = closest_color(pixel, colors_list.values())
-            for color, value in colors_list.items():
-                if np.array_equal(value, closest):
-                    color_counts[color] += 1
-                    total_pixels += 1
-    print(img + " :")
+    for i in range(len(resized_img)):
+        for j in range(len(resized_img[0])):
+            if not np.all(resized_img[i][j] == [255, 255, 255]):
+                closest = closest_color(resized_img[i][j], colors_list.values())
+                for color, value in colors_list.items():
+                    if np.array_equal(value, closest):
+                        color_counts[color] += 1
+                        total_pixels += 1
     print(f"area: {total_pixels} pixels")
     for color, count in color_counts.items():
         print(f"{color}: {round((count / total_pixels) * 100, 2)}")
@@ -115,20 +115,24 @@ colors = {"Noir": np.array([0, 0, 0], dtype=np.int32),
           "Marron": np.array([150, 75, 255], dtype=np.int32),
           "Cyan": np.array([0, 255, 255], dtype=np.int32)}
 
-# extract_bird("Background.png", "corbeau.png")
-# extract_bird("Background.png", "corbeau2.png")
-# extract_bird("Background.png", "corbeau3.png")
-# extract_bird("Background.png", "corbeau4.png")
-# extract_bird("Background.png", "moineau.png")
-# extract_bird("Background.png", "moineau2.png")
-# extract_bird("Background.png", "mesange.png")
-# extract_bird("Background.png", "mesange2.png")
-# color_count("Resultcorbeau.png", colors)
-# color_count("Resultcorbeau2.png", colors)
-# color_count("Resultcorbeau3.png", colors)
-# color_count("Resultcorbeau4.png", colors)
-# color_count("Resultmoineau.png", colors)
-# color_count("Resultmoineau2.png", colors)
-color_count("Resultmesange.png", colors)
-color_count("Resultmesange2.png", colors)
-# extract_bird2("res/birds/moineau3.png")
+
+# extrait tout les oiseaux dans le fichier birds
+def extract_all():
+    directory = "res/birds/"
+    # on parcours tout les fichier de birds
+    for img in os.listdir(directory):
+        # on verifie que le nom correspond à un fichier et que ca ne commence pas par un point
+        if os.path.isfile(os.path.join(directory, img)) and not img.startswith('.'):
+            extract_bird("res/background/Background.png", img)
+
+
+# applique color_count pour tout les fichiers dans le dossier results
+def color_count_all(color_list):
+    directory = "res/results/"
+    for img in os.listdir(directory):
+        if os.path.isfile(os.path.join(directory, img)) and not img.startswith('.'):
+            color_count(img, color_list)
+
+
+extract_all()
+color_count_all(colors)
