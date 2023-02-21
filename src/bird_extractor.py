@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 
+petit = 32000
+grand = 60000
+
 
 # methode qui extrait l'oiseau à partir d'une seule photo
 def extract_bird2(image):
@@ -118,12 +121,14 @@ colors = {"Noir": np.array([0, 0, 0], dtype=np.int32),
 # extract_bird("Background.png", "corbeau4.png")
 # extract_bird("Background.png", "moineau.png")
 # extract_bird("Background.png", "moineau2.png")
-# extract_bird("Background.png", "moineau3.png")
-# print(color_count("Resultcorbeau.png", colors))
-# print(color_count("Resultcorbeau2.png", colors))
-# print(color_count("Resultcorbeau3.png", colors))
-print(color_count("Resultcorbeau4.png", colors))
-print(color_count("Resultmoineau.png", colors))
-print(color_count("Resultmoineau2.png", colors))
-print(color_count("Resultmoineau3.png", colors))
+# extract_bird("Background.png", "mesange.png")
+# extract_bird("Background.png", "mesange2.png")
+# color_count("Resultcorbeau.png", colors)
+# color_count("Resultcorbeau2.png", colors)
+# color_count("Resultcorbeau3.png", colors)
+# color_count("Resultcorbeau4.png", colors)
+# color_count("Resultmoineau.png", colors)
+# color_count("Resultmoineau2.png", colors)
+color_count("Resultmesange.png", colors)
+color_count("Resultmesange2.png", colors)
 # extract_bird2("res/birds/moineau3.png")
