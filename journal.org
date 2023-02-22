@@ -17,3 +17,11 @@ Pagani:
 leur fonctions pour faire des clustering: est-ce que les images dans le meme cluster appartiennent à 
 la même espece de oiseau ?
 - il faut avancer plus vite, vu l'etat d'avancement du projet par rapport à la date. 
+
+<23/02/2022>
+FAIT :
+- base d'images de test : 5 oiseaux * 4 images parisiens mis sur un fond identique
+- calcul d'un histogramme avec des couleurs prédéfinies
+- expérimenter avec les différents critères
+- tester avec des images non utilisées dans le modèle pour débugger
+- faire la suppression du fond
