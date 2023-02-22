@@ -82,9 +82,9 @@ def get_dominant_color(image, colors_list):
 
 
 # compte le nombre de pixels de chaque couleur
-def color_count(img, colors_list):
+def color_count(img, colors_list,dir):
     print(f"color_count: file = {img}")
-    image = cv2.imread("res/results/" + img)
+    image = cv2.imread(dir + img)
     resized_img = cv2.resize(image, (300, 200))
     color_counts = {color: 0 for color in colors_list.keys()}
     total_pixels = 0
@@ -96,10 +96,11 @@ def color_count(img, colors_list):
                     if np.array_equal(value, closest):
                         color_counts[color] += 1
                         total_pixels += 1
-    print(f"area: {total_pixels} pixels")
+    # print(f"area: {total_pixels} pixels")
     for color, count in color_counts.items():
-        print(f"{color}: {round((count / total_pixels) * 100, 2)}")
-
+        color_counts[color] = round((count / total_pixels) * 100, 2)
+        # print(f"{color}: {round((count / total_pixels) * 100, 2)}")
+    return color_counts
 
 # les différentes couleurs possibles
 colors = {"Noir": np.array([0, 0, 0], dtype=np.int32),
@@ -127,8 +128,11 @@ def color_count_all(color_list):
     directory = "res/results/"
     for file in os.listdir(directory):
         if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
-            color_count(file, color_list)
+            color_count(file, color_list,directory)
 
+def main():
+    extract_all()
+    color_count_all(colors)
 
-extract_all()
-color_count_all(colors)
+if __name__ == "__main__":
+    main()
