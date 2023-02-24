@@ -36,12 +36,12 @@ def pixel_area(image_path,dir):
 
 def main():
     print("yes")
-    # p_area = pixel_area("../res/ResultBird.png")
-    # print("L'aire totale de l'objet est de {} pixels²".format(p_area))
+    p_area = pixel_area("Resultmerle3.png","res/results/")
+    print("L'aire totale de l'objet est de {} pixels²".format(p_area))
 
-    # # 1000 pixels pour la focale et 100 millimètres pour la distance de la caméra
-    # c_area = birdRealArea(p_area,100,1000)
-    # print("L'aire totale réelle de l'objet est de {} millimètres²".format(c_area))
+    # 1000 pixels pour la focale et 100 millimètres pour la distance de la caméra
+    c_area = birdRealArea(p_area,100,1000)
+    print("L'aire totale réelle de l'objet est de {} millimètres²".format(c_area))
 
 if __name__ == "__main__":
     main()
