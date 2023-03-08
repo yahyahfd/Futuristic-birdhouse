@@ -25,3 +25,16 @@ FAIT :
 - expérimenter avec les différents critères
 - tester avec des images non utilisées dans le modèle pour débugger
 - faire la suppression du fond
+
+
+<08/03/2023>
+DONNÉ : Rpi et caméra arducam
+FAIT :
+- passage de HSV en RGB
+- calcul de distance d'histogramme : somme des rapports pour chaque teinte (H)
+- calssification en utilisant la taille et l'histogramme (à revoir)
+A FAIRE
+- revoir la manière de combiner l'erreur sur la taille et celle sur l'histogramme
+- essayer différentes combinaisons (coefficients)
+- essayer gitlab-ci (intégration continue)
+- installer le Rpi, prendre des photos, les envoyer sur le réseau
