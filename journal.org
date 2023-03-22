@@ -38,3 +38,20 @@ A FAIRE
 - essayer différentes combinaisons (coefficients)
 - essayer gitlab-ci (intégration continue)
 - installer le Rpi, prendre des photos, les envoyer sur le réseau
+
+<23/3/2023>
+
+En cours :
+
+- mise en place Rpi
+
+Problème rencontré :
+
+- détection de la camera par le pilote (à résoudre d'urgence}
+
+À faire :
+
+cf. semaine précédente
+
+RdV très vite (semaine prochaîne ?)
+
