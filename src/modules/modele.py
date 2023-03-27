@@ -1,7 +1,7 @@
 import os
 import shutil
-from dimensions import birdRealArea, pixel_area
-from bird_extractor import color_count_dict
+from modules.dimensions import birdRealArea, pixel_area
+from modules.bird_extractor import color_count_dict
 
 valid_images = dict()
 
@@ -88,7 +88,7 @@ def compare_two_images_Colors(img1, img2,dir1,dir2):
 def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold):
     color_similarities = compare_two_images_Colors(img1,img2,dir1,dir2)
     area_similarities = compare_two_images_Area(img1,img2,dist,focal,dir1,dir2)
-    moyenne = (area_similarities + color_similarities)/2
+    moyenne = (0.35*area_similarities) + (0.65*color_similarities)
     print(f"couleurs: {color_similarities}")
     print(f"aires: {area_similarities}")
     if(moyenne>threshold):

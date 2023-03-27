@@ -42,17 +42,6 @@ def extract_bird(background, bird):
                 result[i][j] = (255, 255, 255)
     cv2.imwrite("res/results/Result" + bird.split('.')[0] + ".png", result)
 
-
-# def closest_color(color, color_list):
-#    min_distance = np.inf
-#    res = None
-#    for c in color_list:
-#        distance = np.sum(np.abs(c - color))
-#        if distance < min_distance:
-#            min_distance = distance
-#            res = c
-#    return res
-
 def closest_color(pixel, color_list):
     min_distance = np.inf
     closest = None
