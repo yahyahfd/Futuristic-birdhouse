@@ -1,7 +1,7 @@
 import os
 import shutil
-from modules.dimensions import birdRealArea, pixel_area
-from modules.bird_extractor import color_count_dict
+from dimensions import birdRealArea, pixel_area
+from colors import color_count_dict
 
 valid_images = dict()
 
