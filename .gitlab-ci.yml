@@ -1,0 +1,32 @@
+# Choix de l'image Docker pour l'exécution du pipeline
+image: python:3.10.6
+
+# Les étapes du pipeline
+stages:
+  - test
+  - build
+  - deploy
+
+# Etape de test
+test:
+  stage: test
+  script:
+    - pip install -r requirements.txt
+    - python -m unittest discover -s tests
+
+# Etape de build
+build:
+  stage: build
+  script:
+    - pip install -r requirements.txt
+    - python -m py_compile src/main.py
+    - python -m py_compile src/modules/*.py
+
+# Etape de déploiement
+deploy:
+  stage: deploy
+  script:
+    - pip install -r requirements.txt
+    - echo "Déploiement de l'application"
+  only:
+    - tags # Ne déployer que sur les tags

@@ -1,0 +1,57 @@
+**08/02/2023**
+premier RDV depuis décembre
+FAIT : 
+- expérimentations avec keras 
+À FAIRE : 
+- il faut aller plus vite
+- penser que c'est un projet de programmation
+- essayer l'approche par traitement d'image avec critères
+  + contour de l'oiseau, taille, couleur, etc.
+- revenir la semaine prochaine avec quelques preuves de concept
+
+**15/02/2023**
+Pagani:
+- ils ont montré ce qu'ils sont fait : get_dominant_color et get_aire.
+- je remarque qu'ils suppose de prendre de photos de oiusseaux trés specifique, pas vraiement realiste
+- je suggere de collecter bcp plus d'images (une cinquantaine, ou plus) et de tester 
+leur fonctions pour faire des clustering: est-ce que les images dans le meme cluster appartiennent à 
+la même espece de oiseau ?
+- il faut avancer plus vite, vu l'etat d'avancement du projet par rapport à la date. 
+
+<23/02/2022>
+FAIT :
+- base d'images de test : 5 oiseaux * 4 images parisiens mis sur un fond identique
+- calcul d'un histogramme avec des couleurs prédéfinies
+- expérimenter avec les différents critères
+- tester avec des images non utilisées dans le modèle pour débugger
+- faire la suppression du fond
+
+
+<08/03/2023>
+DONNÉ : Rpi et caméra arducam
+FAIT :
+- passage de HSV en RGB
+- calcul de distance d'histogramme : somme des rapports pour chaque teinte (H)
+- calssification en utilisant la taille et l'histogramme (à revoir)
+A FAIRE
+- revoir la manière de combiner l'erreur sur la taille et celle sur l'histogramme
+- essayer différentes combinaisons (coefficients)
+- essayer gitlab-ci (intégration continue)
+- installer le Rpi, prendre des photos, les envoyer sur le réseau
+
+<23/3/2023>
+
+En cours :
+
+- mise en place Rpi
+
+Problème rencontré :
+
+- détection de la camera par le pilote (à résoudre d'urgence}
+
+À faire :
+
+cf. semaine précédente
+
+RdV très vite (semaine prochaîne ?)
+
