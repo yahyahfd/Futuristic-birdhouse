@@ -3,26 +3,25 @@ import cv2
 # On imagine qu'on n'a que des images d'oiseaux avec fond transparent
 # distance_from_objective est en millimètres, focal_length en pixels²
 # apparent_size en pixel et le resultat en millimètre²
+
+
 def birdRealArea(apparent_area, distance_from_objective, focal_length):
     return (apparent_area * (distance_from_objective**2))/(focal_length**2)
 
 
-# Méthode afin de calculer l'aire totale de l'oiseau en pixel
-def pixel_area(image_path,dir):
-    # On charge l'image en niveau de gris pour faciliter le "filtrage"
-    img = cv2.imread(dir +image_path, cv2.IMREAD_GRAYSCALE)
+def pixel_area(image_path, dir):
+    # Charger l'image
+    img = cv2.imread(dir + image_path)
 
-    # On applique un seuil afin de séparer l'oiseau du fond blanc
-    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    # Convertir l'image en niveau de gris
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # On cherche maintenant les contours de l'objet...
-    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Appliquer un seuil pour séparer les pixels non blancs des pixels blancs
+    _, binary = cv2.threshold(gray, 240, 255, cv2.THRESH_BINARY_INV)
 
-    # ... et on fait la somme des aires des contours afin d'obtenir l'aire totale
-    total_area = 0
-    for contour in contours:
-        total_area += cv2.contourArea(contour)
-    
+    # Calculer l'aire totale en pixels des pixels non blancs
+    total_area = cv2.countNonZero(binary)
+
     return total_area
 
 
@@ -36,12 +35,13 @@ def pixel_area(image_path,dir):
 
 def main():
     print("yes")
-    p_area = pixel_area("Resultmerle3.png","res/results/")
+    p_area = pixel_area("Resultmerle3.png", "res/results/")
     print("L'aire totale de l'objet est de {} pixels²".format(p_area))
 
     # 1000 pixels pour la focale et 100 millimètres pour la distance de la caméra
-    c_area = birdRealArea(p_area,100,1000)
+    c_area = birdRealArea(p_area, 100, 1000)
     print("L'aire totale réelle de l'objet est de {} millimètres²".format(c_area))
+
 
 if __name__ == "__main__":
     main()
