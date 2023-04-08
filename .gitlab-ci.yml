@@ -12,7 +12,8 @@ test:
   stage: test
   script:
     - pip install --upgrade pip
-    - apt-get update && apt-get install -y libgl1-mesa-glx
+    - apt-get update
+    - apt-get install -y libgl1-mesa-glx
     - pip install -r requirements.txt
     - python -m unittest discover -s tests
 
