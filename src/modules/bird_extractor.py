@@ -28,18 +28,18 @@ def extract_bird2(image):
 
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
-def extract_bird(background, bird):
+def extract_bird(background, bird,dir1,dir2):
     print(f"extract_bird: bird = {bird}")
     back = cv2.imread(background)
     background_img = cv2.resize(back, (600, 400))
-    bir = cv2.imread("res/birds/" + bird)
+    bir = cv2.imread(dir1 + bird)
     bird_img = cv2.resize(bir, (600, 400))
     result = bird_img.copy()
     for i in range(len(bird_img)):
         for j in range(len(bird_img[0])):
             if (bird_img[i][j] == background_img[i][j]).all():
                 result[i][j] = (255, 255, 255)
-    cv2.imwrite("res/results/Result" + bird.split('.')[0] + ".png", result)
+    cv2.imwrite(dir2+ bird.split('.')[0] + ".png", result)
 
 
 # extrait tout les oiseaux dans le fichier birds
@@ -49,7 +49,7 @@ def extract_all():
     for file in os.listdir(directory):
         # on verifie que le nom correspond à un fichier et que ca ne commence pas par un point
         if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
-            extract_bird("res/background/Background.png", file)
+            extract_bird("res/background/Background.png", file,directory,"res/results/Result")
 
 def main():
     extract_all()
