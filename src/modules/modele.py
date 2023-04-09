@@ -1,7 +1,7 @@
 import os
 import shutil
-from dimensions import birdRealArea, pixel_area
-from colors import color_count_dict
+from src.modules.dimensions import birdRealArea, pixel_area
+from src.modules.colors import color_count_dict
 
 valid_images = dict()
 
@@ -38,12 +38,15 @@ def get_median_color_percentage(color_dict):
     sorted_dict = {k: v for k, v in sorted(color_dict.items(), key=lambda item: item[1])}
     values = list(sorted_dict.values())
     length = len(values)
+    if length <= 1:
+        return values[0] if length == 1 else 0
     median_index = (length - 1)//2
     if length % 2 == 0:
         median_value = (values[median_index] + values[median_index + 1]) / 2
     else:
         median_value = values[median_index]
     return median_value
+
 
 # img1 et img2 deux images différentes ou non
 # Return un coefficient de similarité entre les deux disctionnaires
@@ -59,6 +62,12 @@ def compare_two_images_Colors(img1, img2,dir1,dir2):
         c_dict_2 = valid_images[img2][1]
     else:
         c_dict_2 = color_count_dict(img2,dir2)
+
+    if not c_dict_1 and not c_dict_2:
+        # les deux images sont blanches, donc 100% de similarité
+        # les 2 dicts sont vides
+        return 1
+    
     # On fusionne utilise les clefs des deux dicts pour avoir notre
     # dictionnaire finale
     keys = list(c_dict_1.keys() | c_dict_2.keys())
@@ -75,11 +84,16 @@ def compare_two_images_Colors(img1, img2,dir1,dir2):
     threshold = get_median_color_percentage(result_dict)
     total_colors = 0
     count_colors = 0
+    count_all = 0
     for val in result_dict.values():
-        if val > threshold:
+        if val >= threshold:
             total_colors += val
             count_colors += 1
+        else:
+            count_all += 1
     if count_colors == 0:
+        print("empty : {}".format(count_all))
+        print(threshold)
         return 0
     else:
         return total_colors/count_colors
