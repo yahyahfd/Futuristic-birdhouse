@@ -1,5 +1,5 @@
 import unittest
-from modules.colors import *
+from src.modules.colors import *
 
 
 class TestColors(unittest.TestCase):
