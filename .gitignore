@@ -1,2 +1,4 @@
 src/__pycache__/
 src/modules/__pycache__
+test_img/
+tests/__pycache__/
