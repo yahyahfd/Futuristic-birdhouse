@@ -55,6 +55,7 @@ class TestCompareTwoImages(unittest.TestCase):
         focal = 200
         threshold = 0.9
         # Images identiques: img1 blanche, img2 et img3 même image
+        print()
         self.assertTrue(compare_two_images("img1.png", "img1.png", dist, focal, dir1, dir1, threshold))
         self.assertTrue(compare_two_images("img2.png", "img2.png", dist, focal, dir1, dir1, threshold))
         self.assertTrue(compare_two_images("img3.png", "img3.png", dist, focal, dir1, dir1, threshold))

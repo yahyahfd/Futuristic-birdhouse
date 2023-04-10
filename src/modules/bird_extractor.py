@@ -29,7 +29,7 @@ def extract_bird2(image):
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
 def extract_bird(background, bird,dir1,dir2):
-    print(f"extract_bird: bird = {bird}")
+    print(f"extract_bird: \033[1;34m{bird}\033[m")
     back = cv2.imread(background)
     background_img = cv2.resize(back, (600, 400))
     bir = cv2.imread(dir1 + bird)
