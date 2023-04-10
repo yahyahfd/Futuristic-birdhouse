@@ -53,9 +53,7 @@ deploy-job:
               \"ref\": \"${CI_COMMIT_TAG}\",
               \"description\": \"## release: ${CI_COMMIT_TAG}\",
               \"assets\": {}
-              }" 
-  tags:
-    - gigi, ginette
+              }"
   only:
     - tags # Ne déployer que sur les tags
 
@@ -66,7 +64,5 @@ cleanup-job:
   script:
     - echo "Nettoyage"
     - rm -rf plong-${CI_COMMIT_TAG}.zip
-  tags:
-    - gigi, ginette
   only:
     - tags
