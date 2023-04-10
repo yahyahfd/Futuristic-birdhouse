@@ -1,4 +1,4 @@
-from modules.modele import load_valid, model_train_from_results;
+from src.modules.modele import load_valid, model_train_from_results;
 
 def main(dist,focal):
     # code pour comparer les oiseaux
