@@ -26,7 +26,7 @@ build-job:
   stage: build
   script:
     - echo "Construction du projet"
-    - python -m py_compile src/main.py
+    - python -m py_compile main.py
     - python -m py_compile src/modules/*.py
     - zip -r plong-${CI_COMMIT_TAG}.zip *
     - chmod 777 plong-${CI_COMMIT_TAG}.zip
