@@ -122,19 +122,21 @@ def load_valid(dist,focal):
 # on le rempli d'images plus ou moins similaires à celles
 # présentes dans ce dossier à partir du dossier results
 def model_train(file,dist,focal):
-        dir1 = "res/results/"
-        dir2 = "res/model_trainer/"
+        dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
+        for dir in dirs:
+            if not os.path.exists(dir):
+                os.makedirs(dir)
         moved = -1
         for paths in valid_images:
-            if(compare_two_images(file,paths,dist,focal,dir1,dir2,0.80)):
+            if(compare_two_images(file,paths,dist,focal,dirs[0],dirs[1],0.80)):
                 if file not in valid_images:
-                    p_area = pixel_area(file,dir1)
-                    valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dir1))
-                    shutil.move(dir1+file, "res/model_trainer/")
+                    p_area = pixel_area(file,dirs[0])
+                    valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[0]))
+                    shutil.move(dirs[0]+file, dirs[1])
                     moved = 1
                 break
         if(moved == -1):
-            shutil.move(dir1+file, "res/invalid_images/")
+            shutil.move(dirs[0]+file, dirs[2])
 
 
 def model_train_from_results(dist,focal):
