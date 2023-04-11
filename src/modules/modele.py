@@ -10,7 +10,6 @@ valid_images = dict()
 # Return un coefficient de similarité entre les deux aires
 # On décidera plus tard de ce qu'un coefficient correct vaut
 def compare_two_images_Area(img1, img2,dist,focal,dir1,dir2):
-    print(f"Comparing two images (area): img1 = {img1} img2 = {img2}")
     if(img1 in valid_images):       
         c_area_1 = valid_images[img1][0]
     else:
@@ -30,7 +29,6 @@ def compare_two_images_Area(img1, img2,dist,focal,dir1,dir2):
             return 1
         else:
             return 0
-    print(f"min area: {min_area} et max area {max_area}")
     return (min_area/max_area)
 
 # calcul de la médiane après avoir trier le dictionnaire de couleurs
@@ -53,7 +51,6 @@ def get_median_color_percentage(color_dict):
 # de couleurs (une moyenne entre tous les coeff de couleurs 2 à 2)
 # On décidera plus tard de ce qu'un coefficient correct vaut
 def compare_two_images_Colors(img1, img2,dir1,dir2):
-    print(f"Comparing two images (colors): img1 = {img1} img2 = {img2}")
     if(img1 in valid_images):       
         c_dict_1 = valid_images[img1][1]
     else:
@@ -92,14 +89,13 @@ def compare_two_images_Colors(img1, img2,dir1,dir2):
         else:
             count_all += 1
     if count_colors == 0:
-        print("empty : {}".format(count_all))
-        print(threshold)
         return 0
     else:
         return total_colors/count_colors
 
 #fait une comparaison de l'aire et des couleurs de 2 images
 def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold):
+    print(f"Comparing two images: \033[1;34m{img1}\033[0m & \033[1;34m{img2}\033[0m")
     color_similarities = compare_two_images_Colors(img1,img2,dir1,dir2)
     area_similarities = compare_two_images_Area(img1,img2,dist,focal,dir1,dir2)
     moyenne = (0.35*area_similarities) + (0.65*color_similarities)
@@ -114,41 +110,43 @@ def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold):
 
 #charger les images valides dans valid_images
 def load_valid(dist,focal):
-    print("load VALID")
+    print("Loading valid images...")
     directory = "res/model_trainer/"
     for file in os.listdir(directory):
         if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
             p_area = pixel_area(file,directory)
             valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,directory))
-            print(f"Loading to model: {file} ...")
+            print(f"Loading to model: {file}")
 
 # De base il y a des images dans le dossier model_trainer
 # on le rempli d'images plus ou moins similaires à celles
 # présentes dans ce dossier à partir du dossier results
 def model_train(file,dist,focal):
-        print("model training")
-        dir1 = "res/results/"
-        dir2 = "res/model_trainer/"
+        dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
+        for dir in dirs:
+            if not os.path.exists(dir):
+                os.makedirs(dir)
         moved = -1
         for paths in valid_images:
-            if(compare_two_images(file,paths,dist,focal,dir1,dir2,0.80)):
+            if(compare_two_images(file,paths,dist,focal,dirs[0],dirs[1],0.80)):
                 if file not in valid_images:
-                    p_area = pixel_area(file,dir1)
-                    valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dir1))
-                    shutil.move(dir1+file, "res/model_trainer/")
+                    p_area = pixel_area(file,dirs[0])
+                    valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[0]))
+                    shutil.move(dirs[0]+file, dirs[1])
                     moved = 1
                 break
         if(moved == -1):
-            shutil.move(dir1+file, "res/invalid_images/")
+            shutil.move(dirs[0]+file, dirs[2])
 
 
 def model_train_from_results(dist,focal):
-    print("from results")
+    print("\nModel training...")
     directory = "res/results"
     for file in os.listdir(directory):
         if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
             model_train(file,dist,focal)
-
+    print("\nModel training finished.")
+    
 def main():
     # img1 = "Resultcorbeau.png"
     # img2 = "Resultpigeon.png"
