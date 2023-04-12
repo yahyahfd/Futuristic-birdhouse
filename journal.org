@@ -55,3 +55,20 @@ cf. semaine précédente
 
 RdV très vite (semaine prochaîne ?)
 
+<12/04/2023>
+FAIT:
+- caméra pas détectée
+- tests unitaires dans l'intégrations continue
+  + extraction de l'oiseau sur un fond uni
+  + extraction des couleurs
+  + mesure de surface
+- refactoring (modularisation, script de tests)
+À FAIRE:
+- ajouter des tests :
+  + extraction de l'oiseau sur un fond non uni
+  + même chose en condition réelle, où le fond change légèrement (léger mouvement, changement de luminosité)
+  + calcul de distance
+  + faire des testsà grande échelle (une centaine d'oiseaux ?) pour voir si l'algo
+    arrive à les distinguer partiellement, uniquement avec les couleurs
+    (même espèce = même catégorie)
+- faire fonctionner la caméra (le problème vient de l'OS)
