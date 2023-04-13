@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+from rembg import remove
 
 # methode qui extrait l'oiseau à partir d'une seule photo
 def extract_bird2(image):
@@ -42,6 +43,15 @@ def extract_bird(background, bird,dir1,dir2):
     cv2.imwrite(dir2+ bird.split('.')[0] + ".png", result)
 
 
+# Methode avec la library RemBG
+def new_extract_bird(path):
+    output_path = 'result.jpg'
+
+    input = cv2.imread(path)
+    output = remove(input)
+    cv2.imwrite(output_path, output)
+
+
 # extrait tout les oiseaux dans le fichier birds
 def extract_all():
     directory = "res/birds/"
@@ -52,7 +62,8 @@ def extract_all():
             extract_bird("res/background/Background.png", file,directory,"res/results/Result")
 
 def main():
-    extract_all()
+    # extract_all()
+    new_extract_bird('./test.jpg')
 
 if __name__ == "__main__":
     main()
