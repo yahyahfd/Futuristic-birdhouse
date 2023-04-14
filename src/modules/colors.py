@@ -36,7 +36,7 @@ def rgb_to_hsv(color):
 # compte le nombre de pixels de chaque couleur en rgb
 # puis converti le tout en hsv avant de regrouper
 # les couleurs par leur hue (teinte)
-def color_count_dict(img,dir):
+def old_color_count_dict(img,dir):
     # print(f"color_count_dict: file = {img}")
     image = cv2.imread(dir + img)
     resized_img = cv2.resize(image, (300, 200))
@@ -94,15 +94,45 @@ def color_count_dict(img,dir):
 #           "Marron": np.array([150, 75, 255], dtype=np.int32),
 #           "Cyan": np.array([0, 255, 255], dtype=np.int32)}
 
+
+# compte le nombre de pixels de chaque couleur en rgb
+# puis converti le tout en hsv avant de regrouper
+# les couleurs par leur hue (teinte)
+def color_count_dict(img,dir):
+    print(f"color_count_dict: file = {img}")
+    image = cv2.imread(dir + img, cv2.IMREAD_UNCHANGED)
+    total_pixels = 0
+    color_counts = {}
+    for i in range(len(image)):
+        for j in range(len(image[0])):
+            rgba_color = image[i][j]
+            # transparence
+            alpha = rgba_color[3]
+            if alpha != 0: # Si non transparent
+                total_pixels +=1 
+                rgb_color = rgba_color[:3] # rgb sans canal alpha (sans la transparence)
+                # conversion en hsv
+                hsv_color = cv2.cvtColor(np.uint8([[rgb_color]]), cv2.COLOR_RGB2HSV)[0][0]
+                # On récupére la teinte
+                hue = hsv_color[0]
+                if(hue in color_counts):
+                    color_counts[hue] +=1
+                else:
+                    color_counts[hue] = 1
+
+    # On converti tout ce comptage en pourcentage de présence de chaque couleur (groupé par teinte)
+    for color, count in color_counts.items():
+        color_counts[color] = round((count / total_pixels) * 100, 2)
+    return color_counts
+
 # applique color_count pour tout les fichiers dans le dossier results
-def color_count_all():
-    directory = "res/results/"
-    for file in os.listdir(directory):
-        if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
-            color_count_dict(file,directory)
+def color_count_all(dir):
+    for file in os.listdir(dir):
+        if os.path.isfile(os.path.join(dir, file)) and not file.startswith('.'):
+            color_count_dict(file,dir)
 
 def main():
-    color_count_all()
+    color_count_all("res/results/")
 
 if __name__ == "__main__":
     main()
