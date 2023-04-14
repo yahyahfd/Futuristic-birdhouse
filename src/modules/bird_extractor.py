@@ -45,6 +45,7 @@ def extract_bird3(background, bird,dir1,dir2):
 
 # Methode avec la library RemBG
 def extract_bird(filename,img_path,output_path):
+    print(f"extract_bird: \033[1;34m{filename}\033[m")
     input = cv2.imread(img_path)
     output = remove(input)
     cv2.imwrite(output_path+filename, output)
