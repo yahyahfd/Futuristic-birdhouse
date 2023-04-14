@@ -142,7 +142,6 @@ def model_train(file,dist,focal):
         if(moved == -1):
             shutil.move(dirs[0]+file, dirs[2])
 
-
 def model_train_from_results(dist,focal):
     print("\nModel training...")
     directory = "res/results"

@@ -4,7 +4,7 @@ echo "Réinitialisation du projet"
 mkdir -p res/results # crée le dossier res/results s'il n'existe pas
 
 # Exclusion list
-exclude_list=(Resultmerle.png Resultmerle2.png Resultmesange.png Resultmesange2.png Resultmoineau.png Resultmoineau2.png Resultrougegorge.png Resultrougegorge2.png)
+exclude_list=(merle.png merle2.png mesange.png mesange2.png moineau.png moineau2.png rougegorge.png rougegorge2.png)
 
 # Déplace les images valides de model_trainer
 if [ -n "$(ls -A res/invalid_images 2>/dev/null)" ]; then
