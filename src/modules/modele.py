@@ -1,7 +1,7 @@
 import os
 import shutil
-from dimensions import birdRealArea, pixel_area
-from colors import color_count_dict
+from src.modules.dimensions import birdRealArea, pixel_area
+from src.modules.colors import color_count_dict
 
 valid_images = dict()
 
@@ -109,27 +109,18 @@ def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold):
         return False
 
 #charger les images valides dans valid_images
-def load_valid(dist,focal):
-    dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
-    for dir in dirs:
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+def load_valid(dist,focal,dirs):
     print("Loading valid images...")
-    directory = "res/model_trainer/"
-    for file in os.listdir(directory):
-        if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
-            p_area = pixel_area(file,directory)
-            valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,directory))
+    for file in os.listdir(dirs[1]):
+        if os.path.isfile(os.path.join(dirs[1], file)) and not file.startswith('.'):
+            p_area = pixel_area(file,dirs[1])
+            valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[1]))
             print(f"Loading to model: {file}")
 
 # De base il y a des images dans le dossier model_trainer
 # on le rempli d'images plus ou moins similaires à celles
 # présentes dans ce dossier à partir du dossier results
-def model_train(file,dist,focal):
-        dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
-        for dir in dirs:
-            if not os.path.exists(dir):
-                os.makedirs(dir)
+def model_train(file,dist,focal,dirs):
         moved = -1
         for paths in valid_images:
             if(compare_two_images(file,paths,dist,focal,dirs[0],dirs[1],0.80)):
@@ -142,20 +133,23 @@ def model_train(file,dist,focal):
         if(moved == -1):
             shutil.move(dirs[0]+file, dirs[2])
 
-def model_train_from_results(dist,focal):
+def model_train_from_results(dist,focal,dirs):
     print("\nModel training...")
-    directory = "res/results"
-    for file in os.listdir(directory):
-        if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
-            model_train(file,dist,focal)
+    for file in os.listdir(dirs[0]):
+        if os.path.isfile(os.path.join(dirs[0], file)) and not file.startswith('.'):
+            model_train(file,dist,focal,dirs)
     print("\nModel training finished.")
     
 def main():
+    dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
+    for dir in dirs:
+        if not os.path.exists(dir):
+            os.makedirs(dir)
     # img1 = "Resultcorbeau.png"
     # img2 = "Resultpigeon.png"
     # print(compare_two_images(img1,img2,100,1000))
-    load_valid(100,1000)
-    model_train_from_results(100,1000)
+    load_valid(100,1000,dirs)
+    model_train_from_results(100,1000,dirs)
     # print(compare_two_images_Colors("Resultpigeon4.png","Resultpigeon3.png","res/results/","res/results/"))
     # compare_two_images_Area("Resultpigeon4.png","Resultpigeon3.png",100,1000,"res/results/","res/results/")
 

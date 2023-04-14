@@ -52,6 +52,7 @@ def extract_bird(filename,img_path,output_path):
 
 # extrait tout les oiseaux dans le dossier birds vers le dossiers Results
 def extract_all(input_dir,output_dir):
+    print("\nBird extracting...")
     # on parcours tout les fichier de birds
     for file in os.listdir(input_dir):
         input_file = os.path.join(input_dir, file)

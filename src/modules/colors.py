@@ -123,7 +123,7 @@ def color_count_dict(img,dir):
     colors_to_remove = []
     # On converti tout ce comptage en pourcentage de présence de chaque couleur (groupé par teinte)
     for color, count in color_counts.items():
-        color_counts[color] = round((count / total_pixels) * 100, 3)
+        color_counts[color] = round((count / total_pixels) * 100, 2)
         if(color_counts[color] == 0.0):
             # On stocke dans une liste pour éviter de modifier le dict en pleine itération
             colors_to_remove.append(color)
