@@ -59,6 +59,8 @@ def extract_all(input_dir,output_dir):
             extract_bird(file,input_file,output_dir)
 
 def main():
+    os.makedirs("res/birds/", exist_ok=True)
+    os.makedirs("res/results/", exist_ok=True)
     extract_all("res/birds/","res/results/")
 
 if __name__ == "__main__":
