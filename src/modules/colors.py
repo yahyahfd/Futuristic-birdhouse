@@ -99,7 +99,7 @@ def old_color_count_dict(img,dir):
 # puis converti le tout en hsv avant de regrouper
 # les couleurs par leur hue (teinte)
 def color_count_dict(img,dir):
-    print(f"color_count_dict: file = {img}")
+    # print(f"color_count_dict: file = {img}")
     image = cv2.imread(dir + img, cv2.IMREAD_UNCHANGED)
     total_pixels = 0
     color_counts = {}
@@ -120,9 +120,17 @@ def color_count_dict(img,dir):
                 else:
                     color_counts[hue] = 1
 
+    colors_to_remove = []
     # On converti tout ce comptage en pourcentage de présence de chaque couleur (groupé par teinte)
     for color, count in color_counts.items():
-        color_counts[color] = round((count / total_pixels) * 100, 2)
+        color_counts[color] = round((count / total_pixels) * 100, 3)
+        if(color_counts[color] == 0.0):
+            # On stocke dans une liste pour éviter de modifier le dict en pleine itération
+            colors_to_remove.append(color)
+        
+    # Si on a 0.0, on supprime de notre dictionnaire car négligeable (3 chiffres après la virgule et on a 0.0...)
+    for color in colors_to_remove:
+        color_counts.pop(color)
     return color_counts
 
 # applique color_count pour tout les fichiers dans le dossier results

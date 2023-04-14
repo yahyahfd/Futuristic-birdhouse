@@ -1,7 +1,7 @@
 import os
 import shutil
-from src.modules.dimensions import birdRealArea, pixel_area
-from src.modules.colors import color_count_dict
+from dimensions import birdRealArea, pixel_area
+from colors import color_count_dict
 
 valid_images = dict()
 
@@ -47,7 +47,7 @@ def get_median_color_percentage(color_dict):
 
 
 # img1 et img2 deux images différentes ou non
-# Return un coefficient de similarité entre les deux disctionnaires
+# Return un coefficient de similarité entre les deux dictionnaires
 # de couleurs (une moyenne entre tous les coeff de couleurs 2 à 2)
 # On décidera plus tard de ce qu'un coefficient correct vaut
 def compare_two_images_Colors(img1, img2,dir1,dir2):
@@ -60,10 +60,10 @@ def compare_two_images_Colors(img1, img2,dir1,dir2):
     else:
         c_dict_2 = color_count_dict(img2,dir2)
 
-    if not c_dict_1 and not c_dict_2:
-        # les deux images sont blanches, donc 100% de similarité
-        # les 2 dicts sont vides
-        return 1
+    # if not c_dict_1 and not c_dict_2:
+    #     # les deux images sont blanches, donc 100% de similarité
+    #     # les 2 dicts sont vides
+    #     return 1
     
     # On fusionne utilise les clefs des deux dicts pour avoir notre
     # dictionnaire finale
@@ -110,6 +110,10 @@ def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold):
 
 #charger les images valides dans valid_images
 def load_valid(dist,focal):
+    dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
+    for dir in dirs:
+        if not os.path.exists(dir):
+            os.makedirs(dir)
     print("Loading valid images...")
     directory = "res/model_trainer/"
     for file in os.listdir(directory):
