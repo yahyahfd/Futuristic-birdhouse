@@ -12,34 +12,35 @@ class TestCompareTwoImages(unittest.TestCase):
         self.focal = 1000
         self.distance = 100
         # Image vide
-        self.img1 = np.full((400, 600, 3), 255, dtype=np.uint8)
+        self.img1 = np.full((400, 600, 4), 255, dtype=np.uint8)
+
         # Image initialement vide, puis remplie à 50% de rouge
-        self.img2 = np.full((400, 600, 3), 255, dtype=np.uint8)
+        self.img2 = np.full((400, 600, 4), 255, dtype=np.uint8)
         indices = np.random.choice(range(600*400), size=600*400//2, replace=False)
         for i in indices:
             x, y = i % 600, i // 600
-            self.img2[y, x] = [0, 0, 255]
+            self.img2[y, x] = [0, 0, 255, 255]
 
         # Même image que img2 mais avec une autre génération pour comparer
-        self.img2_bis = np.full((400, 600, 3), 255, dtype=np.uint8)
+        self.img2_bis = np.full((400, 600, 4), 255, dtype=np.uint8)
         indices = np.random.choice(range(600*400), size=600*400//2, replace=False)
         for i in indices:
             x, y = i % 600, i // 600
-            self.img2_bis[y, x] = [0, 0, 255]
-
+            self.img2_bis[y, x] = [0, 0, 255, 255]
 
         # Image remplie de couleurs aléatoires
-        self.img3 = np.zeros((400, 600, 3), dtype=np.uint8)
+        self.img3 = np.zeros((400, 600, 4), dtype=np.uint8)
         self.img3[:200, :200, 0] = 255  # rouge
         self.img3[200:, :200, 1] = 255  # vert
         self.img3[0:, 200:, 2] = 255  # bleu
+        self.img3[:, :, 3] = 255   # alpha
 
         # Image mirroir de img3 (même couleurs dans mêmes proportions)
-        self.img3_bis = np.zeros((400, 600, 3), dtype=np.uint8)
+        self.img3_bis = np.zeros((400, 600, 4), dtype=np.uint8)
         self.img3_bis[:200, 400:, 0] = 255  # rouge
         self.img3_bis[200:, 400:, 1] = 255  # vert
         self.img3_bis[0:, :400, 2] = 255  # bleu
-
+        self.img3_bis[:, :, 3] = 255   # alpha
 
         # Enregistrer les images dans le dossier img
         cv2.imwrite("test_img/img1.png", self.img1)

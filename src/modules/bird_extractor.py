@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+from rembg import remove
 
 # methode qui extrait l'oiseau à partir d'une seule photo
 def extract_bird2(image):
@@ -28,7 +29,7 @@ def extract_bird2(image):
 
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
-def extract_bird(background, bird,dir1,dir2):
+def extract_bird3(background, bird,dir1,dir2):
     print(f"extract_bird: \033[1;34m{bird}\033[m")
     back = cv2.imread(background)
     background_img = cv2.resize(back, (600, 400))
@@ -42,17 +43,27 @@ def extract_bird(background, bird,dir1,dir2):
     cv2.imwrite(dir2+ bird.split('.')[0] + ".png", result)
 
 
-# extrait tout les oiseaux dans le fichier birds
-def extract_all():
-    directory = "res/birds/"
+# Methode avec la library RemBG
+def extract_bird(filename,img_path,output_path):
+    print(f"extract_bird: \033[1;34m{filename}\033[m")
+    input = cv2.imread(img_path)
+    output = remove(input)
+    cv2.imwrite(output_path+filename, output)
+
+# extrait tout les oiseaux dans le dossier birds vers le dossiers Results
+def extract_all(input_dir,output_dir):
+    print("\nBird extracting...")
     # on parcours tout les fichier de birds
-    for file in os.listdir(directory):
+    for file in os.listdir(input_dir):
+        input_file = os.path.join(input_dir, file)
         # on verifie que le nom correspond à un fichier et que ca ne commence pas par un point
-        if os.path.isfile(os.path.join(directory, file)) and not file.startswith('.'):
-            extract_bird("res/background/Background.png", file,directory,"res/results/Result")
+        if os.path.isfile(input_file) and not file.startswith('.'):
+            extract_bird(file,input_file,output_dir)
 
 def main():
-    extract_all()
+    os.makedirs("res/birds/", exist_ok=True)
+    os.makedirs("res/results/", exist_ok=True)
+    extract_all("res/birds/","res/results/")
 
 if __name__ == "__main__":
     main()
