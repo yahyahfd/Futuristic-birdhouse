@@ -31,8 +31,8 @@ try:
         now = datetime.now()
         heure_actuelle = now.strftime("%Y-%m-%d_%H-%M-%S")
 
-        transport = client.get_transport()
-        sftp = transport.open_sftp()
+        # transport = client.get_transport()
+        sftp = client.open_sftp()
         sftp.get('/home/pi/photo.png', f'./{heure_actuelle}.png')
         sftp.close()
         
