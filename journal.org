@@ -72,3 +72,23 @@ FAIT:
     arrive à les distinguer partiellement, uniquement avec les couleurs
     (même espèce = même catégorie)
 - faire fonctionner la caméra (le problème vient de l'OS)
+
+<19/04/2023> 
+
+Degorre
+
+FAIT
+
++ problème caméra résolu en réinstallant raspbian
++ système de commande depuis PC pour prendre photos depuis RaspBerry
+- extraction pas assez fiable dès que ça bouge ou que le fond n'est pas uni
++ changement méthode en utilisant bibliothèque background remove
++ unsupervised clustering (a tendange à rassembler les oiseaux par couleur)
++ utilisation de k-means (en utilisant la couleur moyenne comme critère), pour l'instant peu de résultats
+
+A FAIRE
+
+- converger pour la partie reconnaissance (même si ce n'est pas parfait)
+- ne pas perdre de vue l'intégration dans le dispositif physique (s'assurer d'avoir un système qui marche de bout en bout)
+
+Méthode : utiliser faux oiseaux et/ou vidéos.
