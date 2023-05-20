@@ -22,7 +22,7 @@ do
     mv "$dir"*.png resources/extracted_birds_to_validate/ 2>/dev/null
 
     # Supprime le sous-dossier s'il est vide
-    # rm -r "$dir" 2>/dev/null
+    rm -r "$dir" 2>/dev/null
 done
 
 echo "Projet réinitialisé. Toutes les images ont été déplacées dans leur dossier initial, et les sous-dossiers dans 'results' ont été supprimés."

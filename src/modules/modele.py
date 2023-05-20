@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 from src.modules.dimensions import birdRealArea, pixel_area
 from src.modules.colors import color_count_dict
 
@@ -153,7 +154,8 @@ def model_train_from_results(dist,focal,dirs):
         if os.path.isfile(os.path.join(dirs[0], file)) and not file.startswith('.'):
             model_train(file,dist,focal,dirs)
     print("\nModel training finished.")
-    
+
+# NOT USED 
 def percentage_in_sub_dir(sub_dir):
     if(sub_dir in percentage_subdirs):
         print(percentage_subdirs[sub_dir])
@@ -225,6 +227,8 @@ def unsupervised_model(dist,focal,dirs):
         for bird in copy_bird_list:
             shutil.move(dirs[3]+bird, folder)
             bird_list.remove(bird)
+        time.sleep(3)
+
     print("\nUnsupervised training completed.")
 
 #  ANCIENS AJOUTS DANS UNSUPERVISED MODEL
