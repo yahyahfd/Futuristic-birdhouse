@@ -48,7 +48,8 @@ def extract_bird(filename,img_path,output_path):
     print(f"extract_bird: \033[1;34m{filename}\033[m")
     input = cv2.imread(img_path)
     output = remove(input)
-    cv2.imwrite(output_path+filename, output)
+    output_filename = os.path.splitext(filename)[0] + ".png"
+    cv2.imwrite(os.path.join(output_path, output_filename), output)
 
 # extrait tout les oiseaux dans le dossier birds vers le dossiers Results
 def extract_all(input_dir,output_dir):
@@ -61,9 +62,13 @@ def extract_all(input_dir,output_dir):
             extract_bird(file,input_file,output_dir)
 
 def main():
-    os.makedirs("res/birds/", exist_ok=True)
-    os.makedirs("res/results/", exist_ok=True)
-    extract_all("res/birds/","res/results/")
+    resource_folder = "resources/"
+    os.makedirs("accepted_birds/", exist_ok=True)
+    os.makedirs("model_trainer/", exist_ok=True)
+    os.makedirs("birds_to_validate/", exist_ok=True)
+    os.makedirs("extracted_birds_to_validate/", exist_ok=True)
+    extract_all(resource_folder+"accepted_birds/","model_trainer/")
+    extract_all(resource_folder+"birds_to_validate/","extracted_birds_to_validate/")
 
 if __name__ == "__main__":
     main()
