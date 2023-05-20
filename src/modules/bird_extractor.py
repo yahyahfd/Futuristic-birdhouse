@@ -3,6 +3,7 @@ import numpy as np
 import os
 from rembg import remove
 
+#  NOT USED
 # methode qui extrait l'oiseau à partir d'une seule photo
 def extract_bird2(image):
     img = cv2.imread(image)
@@ -27,6 +28,7 @@ def extract_bird2(image):
     cv2.imwrite("res/resultat.png", result)
 
 
+# NOT USED
 # prend deux images, une de fond sans l'oiseau et une avec
 # et renvoie l'oiseau seul dans une nouvelle image
 def extract_bird3(background, bird,dir1,dir2):

@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 
+# NOT USED
 def closest_color(pixel, color_list):
     min_distance = np.inf
     closest = None
@@ -12,7 +13,7 @@ def closest_color(pixel, color_list):
             closest = color
     return closest
 
-
+# NOT USED
 # renvoie la couleur la plus dominante a partir de l'image de l'oiseau
 # en considérant deux couleurs proches comme étant la meme couleur
 def get_dominant_color(image, colors_list):
@@ -33,6 +34,7 @@ def get_dominant_color(image, colors_list):
 def rgb_to_hsv(color):
     return cv2.cvtColor(color, cv2.COLOR_RGB2HSV)
 
+# NOT USED
 # compte le nombre de pixels de chaque couleur en rgb
 # puis converti le tout en hsv avant de regrouper
 # les couleurs par leur hue (teinte)
@@ -103,6 +105,7 @@ def color_count_dict(img,dir):
     image = cv2.imread(dir + img, cv2.IMREAD_UNCHANGED)
     total_pixels = 0
     color_counts = {}
+
     for i in range(len(image)):
         for j in range(len(image[0])):
             rgba_color = image[i][j]
@@ -115,22 +118,32 @@ def color_count_dict(img,dir):
                 hsv_color = cv2.cvtColor(np.uint8([[rgb_color]]), cv2.COLOR_RGB2HSV)[0][0]
                 # On récupére la teinte
                 hue = hsv_color[0]
-                if(hue in color_counts):
-                    color_counts[hue] +=1
-                else:
-                    color_counts[hue] = 1
-
-    colors_to_remove = []
-    # On converti tout ce comptage en pourcentage de présence de chaque couleur (groupé par teinte)
-    for color, count in color_counts.items():
-        color_counts[color] = round((count / total_pixels) * 100, 2)
-        if(color_counts[color] == 0.0):
-            # On stocke dans une liste pour éviter de modifier le dict en pleine itération
-            colors_to_remove.append(color)
+                for color_range, color_name in (
+                    (range(345, 360), 'Rouge'),
+                    (range(0, 15), 'Rouge'),
+                    (range(15, 75), 'Jaune'),
+                    (range(75, 135), 'Vert'),
+                    (range(135, 195), 'Cyan'),
+                    (range(195, 255), 'Bleu'),
+                    (range(255, 345), 'Magenta')
+                    ):
+                    if hue in color_range:
+                        if color_name in color_counts:
+                            color_counts[color_name] += 1
+                        else:
+                            color_counts[color_name] = 1
+                        break
+    # colors_to_remove = []
+    # # On converti tout ce comptage en pourcentage de présence de chaque couleur (groupé par teinte)
+    # for color, count in color_counts.items():
+    #     color_counts[color] = round((count / total_pixels) * 100, 2)
+    #     if(color_counts[color] == 0.0):
+    #         # On stocke dans une liste pour éviter de modifier le dict en pleine itération
+    #         colors_to_remove.append(color)
         
-    # Si on a 0.0, on supprime de notre dictionnaire car négligeable (3 chiffres après la virgule et on a 0.0...)
-    for color in colors_to_remove:
-        color_counts.pop(color)
+    # # Si on a 0.0, on supprime de notre dictionnaire car négligeable (3 chiffres après la virgule et on a 0.0...)
+    # for color in colors_to_remove:
+    #     color_counts.pop(color)
     return color_counts
 
 # applique color_count pour tout les fichiers dans le dossier results
@@ -140,7 +153,7 @@ def color_count_all(dir):
             color_count_dict(file,dir)
 
 def main():
-    color_count_all("res/results/")
+    color_count_all("resources/extracted_birds_to_validate/")
 
 if __name__ == "__main__":
     main()
