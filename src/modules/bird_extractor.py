@@ -1,3 +1,4 @@
+import multiprocessing
 import cv2
 import numpy as np
 import os
@@ -53,15 +54,19 @@ def extract_bird(filename,img_path,output_path):
     output_filename = os.path.splitext(filename)[0] + ".png"
     cv2.imwrite(os.path.join(output_path, output_filename), output)
 
+def process_file(file, input_dir, output_dir):
+    input_file = os.path.join(input_dir, file)
+    extract_bird(file, input_file, output_dir)
+
 # extrait tout les oiseaux dans le dossier birds vers le dossiers Results
 def extract_all(input_dir,output_dir):
     print("\nBird extracting...")
     # on parcours tout les fichier de birds
-    for file in os.listdir(input_dir):
-        input_file = os.path.join(input_dir, file)
-        # on verifie que le nom correspond à un fichier et que ca ne commence pas par un point
-        if os.path.isfile(input_file) and not file.startswith('.'):
-            extract_bird(file,input_file,output_dir)
+    # on verifie que le nom correspond à un fichier et que ca ne commence pas par un point
+    files = [file for file in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, file)) and not file.startswith('.')]
+    pool = multiprocessing.Pool()
+    pool.starmap(process_file, [(file, input_dir, output_dir) for file in files])
+    print("\nBird extraction completed.")
 
 def main():
     resource_folder = "resources/"
