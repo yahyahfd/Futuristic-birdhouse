@@ -4,28 +4,22 @@ import time
 from src.modules.dimensions import birdRealArea, pixel_area
 from src.modules.colors import color_count_dict
 
-valid_images = dict()
 percentage_subdirs = dict()
-images_to_validate = dict()
+images_data = dict()
 
 # img1 et img2 deux images différentes ou non
 # focal et dist comme décrit dans la méthode birdRealArea
 # Return un coefficient de similarité entre les deux aires
 # On décidera plus tard de ce qu'un coefficient correct vaut
-def compare_two_images_Area(img1, img2,dist,focal,dir1,dir2,supornot):
-    if supornot:
-        dict_to_use = valid_images
-    else:
-        dict_to_use = images_to_validate
-
-    if(img1 in dict_to_use):       
-        c_area_1 = dict_to_use[img1][0]
+def compare_two_images_Area(img1, img2,dist,focal,dir1,dir2):
+    if(img1 in images_data):       
+        c_area_1 = images_data[img1][0]
     else:
         p_area_1 = pixel_area(img1,dir1)
         c_area_1 = birdRealArea(p_area_1,dist,focal)
 
-    if(img2 in dict_to_use):
-        c_area_2 = dict_to_use[img2][0]
+    if(img2 in images_data):
+        c_area_2 = images_data[img2][0]
     else:
         p_area_2 = pixel_area(img2,dir2)
         c_area_2 = birdRealArea(p_area_2,dist,focal)
@@ -58,18 +52,13 @@ def get_median_color_percentage(color_dict):
 # Return un coefficient de similarité entre les deux dictionnaires
 # de couleurs (une moyenne entre tous les coeff de couleurs 2 à 2)
 # On décidera plus tard de ce qu'un coefficient correct vaut
-def compare_two_images_Colors(img1, img2,dir1,dir2,supornot):
-    if supornot:
-        dict_to_use = valid_images
-    else:
-        dict_to_use = images_to_validate
-
-    if(img1 in dict_to_use):       
-        c_dict_1 = dict_to_use[img1][1]
+def compare_two_images_Colors(img1, img2,dir1,dir2):
+    if(img1 in images_data):       
+        c_dict_1 = images_data[img1][1]
     else:
         c_dict_1 = color_count_dict(img1,dir1)
-    if(img2 in dict_to_use):       
-        c_dict_2 = dict_to_use[img2][1]
+    if(img2 in images_data):       
+        c_dict_2 = images_data[img2][1]
     else:
         c_dict_2 = color_count_dict(img2,dir2)
 
@@ -109,10 +98,10 @@ def compare_two_images_Colors(img1, img2,dir1,dir2,supornot):
         return total_colors/count_colors
 
 #fait une comparaison de l'aire et des couleurs de 2 images
-def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold, supornot):
+def compare_two_images(img1,img2, dist,focal , dir1,dir2,threshold):
     print(f"Comparing two images: \033[1;34m{img1}\033[0m & \033[1;34m{img2}\033[0m")
-    color_similarities = compare_two_images_Colors(img1,img2,dir1,dir2, supornot)
-    area_similarities = compare_two_images_Area(img1,img2,dist,focal,dir1,dir2, supornot)
+    color_similarities = compare_two_images_Colors(img1,img2,dir1,dir2)
+    area_similarities = compare_two_images_Area(img1,img2,dist,focal,dir1,dir2)
     moyenne = (0.20*area_similarities) + (0.80*color_similarities)
     print(f"couleurs: {color_similarities}")
     print(f"aires: {area_similarities}")
@@ -129,31 +118,8 @@ def load_valid(dist,focal,dirs):
     for file in os.listdir(dirs[1]):
         if os.path.isfile(os.path.join(dirs[1], file)) and not file.startswith('.'):
             p_area = pixel_area(file,dirs[1])
-            valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[1]))
+            images_data[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[1]))
             print(f"Loading to model: {file}")
-
-# De base il y a des images dans le dossier model_trainer
-# on le rempli d'images plus ou moins similaires à celles
-# présentes dans ce dossier à partir du dossier results
-def model_train(file,dist,focal,dirs):
-        moved = -1
-        for paths in valid_images:
-            if(compare_two_images(file,paths,dist,focal,dirs[0],dirs[1],0.80)):
-                if file not in valid_images:
-                    p_area = pixel_area(file,dirs[0])
-                    valid_images[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[0]))
-                    shutil.move(dirs[0]+file, dirs[1])
-                    moved = 1
-                break
-        if(moved == -1):
-            shutil.move(dirs[0]+file, dirs[2])
-
-def model_train_from_results(dist,focal,dirs):
-    print("\nModel training...")
-    for file in os.listdir(dirs[0]):
-        if os.path.isfile(os.path.join(dirs[0], file)) and not file.startswith('.'):
-            model_train(file,dist,focal,dirs)
-    print("\nModel training finished.")
 
 # NOT USED 
 def percentage_in_sub_dir(sub_dir):
@@ -194,7 +160,7 @@ def load_to_validate(dist,focal,dirs):
     for file in os.listdir(dirs[3]):
         if os.path.isfile(os.path.join(dirs[3], file)) and not file.startswith('.'):
             p_area = pixel_area(file,dirs[3])
-            images_to_validate[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[3]))
+            images_data[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[3]))
             print(f"Loading to unsupervised model: {file}")
 
 def unsupervised_model(dist,focal,dirs):
@@ -211,9 +177,9 @@ def unsupervised_model(dist,focal,dirs):
         copy_bird_list = bird_list[1:]
         pivot = bird_list[0]
 
-        # On retire de copy_bird_list tout oiseau avec un taux de similitude >=80% avec notre pivot qu'on déplacera donc dans un dossier avec le nom du pivot
+        # On retire de copy_bird_list tout oiseau avec un taux de similitude >=70% avec notre pivot qu'on déplacera donc dans un dossier avec le nom du pivot
         for bird in bird_list[1:]:
-            if not compare_two_images(pivot,bird,dist,focal,dirs[3],dirs[3],0.80,False):
+            if not compare_two_images(pivot,bird,dist,focal,dirs[3],dirs[3],0.70):
                 copy_bird_list.remove(bird)
         
         # On se retrouve dans copy_bird_list avec uniquement les oiseaux similaires à notre pivot
@@ -228,8 +194,65 @@ def unsupervised_model(dist,focal,dirs):
             shutil.move(dirs[3]+bird, folder)
             bird_list.remove(bird)
         time.sleep(3)
-
     print("\nUnsupervised training completed.")
+
+def supervised_model(dist,focal,dirs):
+    print("\nSupervised training...")
+    # Pour chaque sous-dossier de dirs[4]
+    # Créer deux dossiers Valid et Invalid
+    # Pour chaque image .png dans ces sous-dossiers
+    # Si l'image correspond à 80% à une image présente dans le s valid_images
+    # Rajouter dans valid, sinon invalid
+    for subfolder in os.listdir(dirs[4]):
+        subfolder_path = os.path.join(dirs[4], subfolder)
+        if os.path.isdir(subfolder_path):
+            # On crée les sous-dossiers valid et invalid dans chaque sous-dossier de results
+            valid_folder = os.path.join(subfolder_path, "valid")
+            invalid_folder = os.path.join(subfolder_path, "invalid")
+            os.makedirs(valid_folder, exist_ok=True)
+            os.makedirs(invalid_folder, exist_ok=True)
+            # On doit maintenant distribuer les images présentes dans ce sous-dossier dans valid et invalid
+            # On parcours donc chaque image présente dans notre sous-dossier courant dans results
+            for file in os.listdir(subfolder_path):
+                if file.endswith(".png"):
+                    file_path = os.path.join(subfolder_path,file)
+                    moved = -1
+                    for valid in images_data:
+                        if(compare_two_images(file,valid,dist,focal,subfolder_path,dirs[1],0.70)):
+                            shutil.move(file_path,valid_folder)
+                            print(f"\n{file} was moved to {valid_folder}")
+                            moved = 1
+                        break
+                    if(moved == -1):
+                        shutil.move(file_path,invalid_folder)
+                        print(f"\n{file} was moved to {invalid_folder}")
+    time.sleep(3)
+    print("\nSupervised training completed.")
+
+
+# NOT USED
+# De base il y a des images dans le dossier model_trainer
+# on le rempli d'images plus ou moins similaires à celles
+# présentes dans ce dossier à partir du dossier results
+def model_train(file,dist,focal,dirs):
+        moved = -1
+        for paths in images_data:
+            if(compare_two_images(file,paths,dist,focal,dirs[0],dirs[1],0.80)):
+                if file not in images_data:
+                    p_area = pixel_area(file,dirs[0])
+                    images_data[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[0]))
+                    shutil.move(dirs[0]+file, dirs[1])
+                    moved = 1
+                break
+        if(moved == -1):
+            shutil.move(dirs[0]+file, dirs[2])
+
+def model_train_from_results(dist,focal,dirs):
+    print("\nModel training...")
+    for file in os.listdir(dirs[1]):
+        if os.path.isfile(os.path.join(dirs[1], file)) and not file.startswith('.'):
+            model_train(file,dist,focal,dirs)
+    print("\nModel training finished.")
 
 #  ANCIENS AJOUTS DANS UNSUPERVISED MODEL
 # On doit maintenant comparer le pivot avec chaque sous-dossier présent dans results (et les sous-sous-dossiers)

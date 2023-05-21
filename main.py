@@ -1,5 +1,6 @@
 import os
-from src.modules.modele import load_valid, model_train_from_results, unsupervised_model, load_to_validate
+import sys
+from src.modules.modele import load_valid, load_to_validate, unsupervised_model, supervised_model
 from src.modules.bird_extractor import extract_all
 from src.modules.colors import color_count_all
 
@@ -11,11 +12,14 @@ def main(dist,focal):
     # extract_all(dirs[0],dirs[1])
     # extract_all(dirs[2],dirs[3])
     load_to_validate(dist,focal,dirs)
-    # load_valid(dist,focal,dirs)
+    load_valid(dist,focal,dirs)
+    sys.stdin.flush()  # Vider le tampon d'entrée
     input("Appuyez sur Entrée pour lancer le modèle non supervisé...")
     unsupervised_model(dist,focal,dirs)
+    sys.stdin.flush()  # Vider le tampon d'entrée
     input("Appuyez sur Entrée pour lancer le modèle supervisé...")
-    model_train_from_results(dist,focal,dirs)
+    supervised_model(dist,focal,dirs)
+    # model_train_from_resul    ts(dist,focal,dirs)
 
 if __name__ == '__main__':
     main(100,1000)

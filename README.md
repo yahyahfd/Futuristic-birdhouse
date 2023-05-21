@@ -13,4 +13,8 @@
 2. Lancer ./reset.sh; ce script se charge :
     *   de remettre chaque **image** présente dans chaque **sous-dossier** de 'resources/results/' dans le **dossier initial** 'resources/extracted_birds_to_validate/'
     *   de supprimer les **sous-dossiers créés dans le dossier** 'resources/results/'
-    
+
+
+Implémentation du raspberryPI
+-> dans mon main, on lance cam.py -> factorisation, on doit mettre dans le while, une méthode qui prend la photo
+    puis traite la photo et la classe (supervised model)
