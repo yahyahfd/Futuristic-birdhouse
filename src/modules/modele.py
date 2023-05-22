@@ -93,10 +93,8 @@ def compare_two_images_Colors(img1, img2,dir1,dir2):
         else:
             count_all += 1
     if count_colors == 0:
-        print(0)
         return 0
     else:
-        print(total_colors/count_colors)
         return total_colors/count_colors
 
 #fait une comparaison de l'aire et des couleurs de 2 images
