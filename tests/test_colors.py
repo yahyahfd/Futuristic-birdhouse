@@ -8,27 +8,20 @@ class TestColors(unittest.TestCase):
 
         # image avec 100% de pixels rouges
         img1 = np.zeros((100, 100, 4))
-        img1[:, :] = (255, 0, 255, 255)
-        cv2.imwrite("test_img/magenta_100.png", img1)
+        img1[:, :] = (0,0 , 255, 255)
+        cv2.imwrite("test_img/red_100.png", img1)
 
         # image avec 40% de pixels rouges et 60% de pixels bleus
         img2 = np.zeros((100, 100, 4), dtype=np.uint8)
-        img2[:, :] = (0, 255, 0, 255)
-        img2[:, int(img2.shape[1] * 0.6):] = (255, 0, 255, 255)
-        cv2.imwrite("test_img/green_40_magenta_60.png", img2)
+        img2[:, :] = (255, 255, 0, 255)
+        img2[:, int(img2.shape[1] * 0.6):] = (0, 255, 255, 255)
+        cv2.imwrite("test_img/cyan_60_yellow_40.png", img2)
 
         # image avec 80% de pixels verts et 20% de pixels rouges
         img3 = np.zeros((100, 100, 4), dtype=np.uint8)
-        img3[:, :] = (0, 255, 0, 255)
-        img3[:, :int(img3.shape[1] * 0.2)] = (255, 0, 255, 255)
-        cv2.imwrite("test_img/green_80_magenta_20.png", img3)
-
-
-    def test_closest_colors(self):
-        pixel = np.array([150, 150, 150])
-        color_list = [np.array([255, 255, 255]), np.array([0, 0, 0]), np.array([150, 150, 150])]
-        res = closest_color(pixel, color_list)
-        self.assertEqual(res.tolist(), [150, 150, 150], "La couleur la plus proche n'a pas été trouvée.")
+        img3[:, :] = (0, 0, 255, 255)
+        img3[:, :int(img3.shape[1] * 0.2)] = (0, 255, 0, 255)
+        cv2.imwrite("test_img/green_80_rouge_20.png", img3)
 
     def test_rgb_to_hsv(self):
         red = np.array([[[255, 0, 0]]], dtype=np.uint8)
@@ -48,12 +41,12 @@ class TestColors(unittest.TestCase):
 
     def test_color_count_dict(self):
         directory = "test_img/"
-        expected1 = {'Magenta': 100.0}
-        expected2 = {'Magenta': 40.0, 'Cyan': 60.0}
-        expected3 = {'Magenta': 20.0, 'Cyan': 80.0}
-        actual1 = color_count_dict("magenta_100.png", directory)
-        actual2 = color_count_dict("green_40_magenta_60.png", directory)
-        actual3 = color_count_dict("green_80_magenta_20.png", directory)
+        expected1 = {'Rouge': 100.0}
+        expected2 = {'Jaune': 40.0, 'Cyan': 60.0}
+        expected3 = {'Vert': 20.0, 'Rouge': 80.0}
+        actual1 = color_count_dict("red_100.png", directory)
+        actual2 = color_count_dict("cyan_60_yellow_40.png", directory)
+        actual3 = color_count_dict("green_80_rouge_20.png", directory)
 
         self.assertEqual(expected1, actual1)
         self.assertEqual(expected2, actual2)

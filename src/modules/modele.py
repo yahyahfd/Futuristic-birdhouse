@@ -153,7 +153,6 @@ def process_file(file,dist,focal,directory,isValid):
     if isValid:
         valid_data[file] = (birdRealArea(p_area, dist, focal), color_count_dict(file, directory))
 
-
 #charger les images dans images_data
 def load_image(dist,focal,directory,isValid):
     file_list = [file for file in os.listdir(directory) if os.path.isfile(os.path.join(directory,file)) and not file.startswith('.') and file.endswith(".png")]
