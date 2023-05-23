@@ -60,8 +60,9 @@ class TestCompareTwoImages(unittest.TestCase):
         self.assertTrue(compare_two_images("img1.png", "img1.png", dist, focal, dir1, dir1, threshold)[0])
         self.assertTrue(compare_two_images("img2.png", "img2.png", dist, focal, dir1, dir1, threshold)[0])
         self.assertTrue(compare_two_images("img3.png", "img3.png", dist, focal, dir1, dir1, threshold)[0])
-
-        self.assertFalse(compare_two_images("img1.png", "img2.png", dist, focal, dir1, dir1, threshold)[0])
+        
+        # Une image 100% blanche est considérer identique à n'importe qu'elle image avec une couleur unie
+        self.assertTrue(compare_two_images("img1.png", "img2.png", dist, focal, dir1, dir1, threshold)[0])
         self.assertFalse(compare_two_images("img1.png", "img3.png", dist, focal, dir1, dir1, threshold)[0])
         self.assertFalse(compare_two_images("img2.png", "img3.png", dist, focal, dir1, dir1, threshold)[0])
 
