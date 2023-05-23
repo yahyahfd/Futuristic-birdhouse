@@ -162,16 +162,6 @@ def load_image(dist,focal,directory,isValid):
     pool.close()
     pool.join()
 
-# NOT USED
-#charger les images valides dans valid_images
-def load_valid(dist,focal,dir_1):
-    print("Loading valid images...")
-    for file in os.listdir(dir_1):
-        if os.path.isfile(os.path.join(dir_1, file)) and not file.startswith('.'):
-            p_area = pixel_area(file,dir_1)
-            images_data[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dir_1))
-            print(f"Loading to model: {file}")
-
 def unsupervised_model(dist,focal,dirs_3,dirs_4,threshold):
     print("\nUnsupervised training...")
     # On commence par regrouper toutes les images à 80% similaires présentes dans extracted_bird_to_validate
@@ -238,7 +228,7 @@ def supervised_model(dist,focal,dirs_1,dirs_4,threshold):
                         print(f"\n{file} was moved to {invalid_folder}")
                 time.sleep(1)
     print("\nSupervised training completed.")
-# (dist,focal,dirs_1,dirs_4,threshold)
+
 def model_rasp_image(dist,focal,dir_6,threshold,dir_1,dir_4):
     print("\nAnalysing the freshly taken pictures...")
     for file in os.listdir(dir_6):
@@ -265,60 +255,8 @@ def model_rasp_image(dist,focal,dir_6,threshold,dir_1,dir_4):
                 shutil.move(file_path,dir_4+file+"/"+isValid)
                 print(f"\n{file} was moved to {dir_4}{file}/{isValid}")
 
-
-
-
-# NOT USED
-# De base il y a des images dans le dossier model_trainer
-# on le rempli d'images plus ou moins similaires à celles
-# présentes dans ce dossier à partir du dossier results
-def model_train(file,dist,focal,dirs):
-        moved = -1
-        for paths in images_data:
-            if(compare_two_images(file,paths,dist,focal,dirs[0],dirs[1],0.80)):
-                if file not in images_data:
-                    p_area = pixel_area(file,dirs[0])
-                    images_data[file] = (birdRealArea(p_area,dist,focal), color_count_dict(file,dirs[0]))
-                    shutil.move(dirs[0]+file, dirs[1])
-                    moved = 1
-                break
-        if(moved == -1):
-            shutil.move(dirs[0]+file, dirs[2])
-
-# NOT USED
-def model_train_from_results(dist,focal,dirs):
-    print("\nModel training...")
-    for file in os.listdir(dirs[1]):
-        if os.path.isfile(os.path.join(dirs[1], file)) and not file.startswith('.'):
-            model_train(file,dist,focal,dirs)
-    print("\nModel training finished.")
-
-#  ANCIENS AJOUTS DANS UNSUPERVISED MODEL
-# On doit maintenant comparer le pivot avec chaque sous-dossier présent dans results (et les sous-sous-dossiers)
-# Si on trouve un taux de similitudes à 80% avec un groupe d'oiseaux (un sous-dossier entier y compris ses sous-sous-dossiers)
-# on le marque comme max: à la fin de toutes les comparaisons, si on retrouve un max > 80% -> on déplace les images de 
-# copy_bird_list vers ce sous_dossier, sinon on crée un nouveau sous-dossier
-# max = 0
-# folder = ""
-# for file,percentage in percentage_subdirs:
-#     if max < percentage:
-#         max = percentage
-#         folder = file
-# on vérifie si max >80%, si c'est le cas, on rajoute nos copy birds à folder et on update le pourcentage
-# sinon, on crée un nouveau dossier et on y met nos oiseaux
-
 def main():
-    dirs = ["res/results/","res/model_trainer/", "res/invalid_images/"]
-    for dir in dirs:
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-    # img1 = "Resultcorbeau.png"
-    # img2 = "Resultpigeon.png"
-    # print(compare_two_images(img1,img2,100,1000))
-    load_valid(100,1000,dirs)
-    model_train_from_results(100,1000,dirs)
-    # print(compare_two_images_Colors("Resultpigeon4.png","Resultpigeon3.png","res/results/","res/results/"))
-    # compare_two_images_Area("Resultpigeon4.png","Resultpigeon3.png",100,1000,"res/results/","res/results/")
+    print("Vous êtes censés lancer le programme via le main.")
 
 if __name__ == "__main__":
     main()
