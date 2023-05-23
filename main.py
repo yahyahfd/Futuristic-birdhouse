@@ -13,8 +13,8 @@ def main(dist, focal):
             "extracted_birds_to_validate/", res+"results/", res+"raspberry_birds/", res+"extracted_raspberry_birds/"]
     for dir in dirs:
         os.makedirs(dir, exist_ok=True)
-    # extract_all(dirs[0],dirs[1])
-    # extract_all(dirs[2],dirs[3])
+    extract_all(dirs[0],dirs[1])
+    extract_all(dirs[2],dirs[3])
     print("Loading images for the \033[1;34munsupervised model\033[0m...")
     load_image(dist, focal, dirs[3],False)
     print(
